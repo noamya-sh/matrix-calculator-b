@@ -23,25 +23,39 @@ namespace zich {
     }
     Matrix::Matrix(vector<double> input, int height, int width){
         if (input.size() != height*width){
-            throw invalid_argument("NO!!");
+            throw invalid_argument("NO same size!!");
+        }
+        if (width < 0 || height <0){
+            throw invalid_argument("Height and width are positive!!");
         }
         this->height = height;
         this->width = width;
         this->mat = input;
     }
     Matrix::~Matrix() {}
-    bool Matrix::operator==(const Matrix &other) {
-        if (other.height != height || other.width !=  width){
+    bool operator==(const Matrix &left,const Matrix &right){
+        if (left.height != right.height || left.width !=  right.width){
             throw runtime_error("not same size");
         }
-        for (unsigned int i = 0; i < other.mat.size(); ++i) {
-            if (other.mat[i] != this->mat[i]){
+        for (unsigned int i = 0; i < left.mat.size(); ++i) {
+            if (left.mat[i] != right.mat[i]){
                 return false;
             }
         }
         return true;
     }
-    bool Matrix::operator<=(const Matrix &other) {
+//    bool Matrix::operator==(const Matrix &other) const {
+//        if (other.height != height || other.width !=  width){
+//            throw runtime_error("not same size");
+//        }
+//        for (unsigned int i = 0; i < other.mat.size(); ++i) {
+//            if (other.mat[i] != this->mat[i]){
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+    bool Matrix::operator<=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
@@ -53,7 +67,7 @@ namespace zich {
         }
         return true;
     }
-    bool Matrix::operator!=(const Matrix &other) {
+    bool Matrix::operator!=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
@@ -64,7 +78,7 @@ namespace zich {
         }
         return false;
     }
-    bool Matrix::operator>=(const Matrix &other) {
+    bool Matrix::operator>=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
@@ -76,7 +90,7 @@ namespace zich {
         }
         return true;
     }
-    bool Matrix::operator>(const Matrix &other) {
+    bool Matrix::operator>(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
@@ -88,7 +102,7 @@ namespace zich {
         }
         return true;
     }
-    bool Matrix::operator<(const Matrix &other) {
+    bool Matrix::operator<(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
@@ -132,9 +146,38 @@ namespace zich {
         Matrix ans = Matrix(this->mat,this->height,this->width);
         return ans *= -1;
     }
+    Matrix& Matrix::operator++(){
+        for (unsigned int i = 0; i < this->mat.size() ; ++i) {
+            ++this->mat[i];
+        }
+        return *this;
+    }
+    Matrix Matrix::operator++(int){
+        Matrix temp(this->mat,this->height,this->width);
+        for (unsigned int i = 0; i < this->mat.size() ; ++i) {
+            this->mat[i]++;
+        }
+        return temp;
+    }
+    Matrix& Matrix::operator--(){
+        for (unsigned int i = 0; i < this->mat.size() ; ++i) {
+            --this->mat[i];
+        }
+        return *this;
+    }
+    Matrix Matrix::operator--(int){
+        Matrix temp(this->mat,this->height,this->width);
+        for (unsigned int i = 0; i < this->mat.size() ; ++i) {
+            this->mat[i]--;
+        }
+        return temp;
+    }
     Matrix Matrix::operator+(const Matrix &matrix) const {
         Matrix ans = Matrix(this->mat,this->height,this->width);
         return ans += matrix;
+    }
+    Matrix Matrix::operator+(){
+        return Matrix(this->mat,this->height,this->width);
     }
     Matrix Matrix::operator*(const Matrix &matrix) const{
         if (this->width != matrix.get_height()){
@@ -164,11 +207,12 @@ namespace zich {
             for (unsigned int j = 0; j < matrix.width; ++j,ind++) {
                 for(unsigned int k =0; k < this->width;k++) {
                     temp[ind] += this->mat[((unsigned int) this->width * i) + k] *
-                                 matrix.mat[(k * (unsigned int) matrix.height) + j];
+                                 matrix.mat[(k * (unsigned int) matrix.width) + j];
                 }
             }
         }
         this->mat = temp;
+        this->width = matrix.width;
         return *this;
     }
     ostream &operator<<(ostream &output, const Matrix &matrix) {
@@ -176,11 +220,15 @@ namespace zich {
         for(int i=0;i<matrix.height;i++){
             output<<"[";
             for(int j=0;j<matrix.width;j++){
-
                 output<<matrix.mat[k++] + 0;
-                output<<" ";
+                if (j != matrix.width - 1){
+                    output<<" ";
+                }
             }
-            output << "]" << endl;
+            output << "]";
+            if (i != matrix.height - 1){
+            output<< endl;
+            }
         }
         return output;
     }

@@ -21,21 +21,22 @@ namespace zich {
         Matrix &operator*=(const Matrix &matrix);
         Matrix &operator*=(double scalar);
         Matrix operator+(const Matrix &matrix) const;
-        const Matrix operator+();
+        Matrix operator+();
         Matrix operator++(int);
-        Matrix operator++();
+        Matrix& operator++();
         Matrix &operator+=(const Matrix &matrix);
         Matrix operator-(const Matrix &matrix) const;
         Matrix operator-();
         Matrix &operator-=(const Matrix &matrix);
         Matrix operator--(int);
-        Matrix operator--();
-        bool operator<(const Matrix &other);
-        bool operator>(const Matrix &other);
-        bool operator<=(const Matrix &other);
-        bool operator>=(const Matrix &other);
-        bool operator==(const Matrix &other);
-        bool operator!=(const Matrix &other);
+        Matrix& operator--();
+        bool operator<(const Matrix &other) const;
+        bool operator>(const Matrix &other) const;
+        bool operator<=(const Matrix &other) const;
+        bool operator>=(const Matrix &other) const;
+        friend bool operator==(const Matrix &left,const Matrix &right);
+//        bool operator==(const Matrix &other) const;
+        bool operator!=(const Matrix &other) const;
 
 // I/O functions:
         friend ostream &operator<<(ostream &output, const Matrix &matrix);
