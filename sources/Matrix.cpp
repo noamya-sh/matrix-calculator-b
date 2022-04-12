@@ -234,8 +234,8 @@ namespace zich {
         return output;
     }
     istream &operator>>(istream &input, Matrix &matrix) {
-        string in;
         vector<double> vector;
+        string in;
         getline(input, in);
         int width = 0;
         int height = 0;
@@ -243,7 +243,7 @@ namespace zich {
         size_t pos = 0;
         string row;
         bool only_one_row = false;
-        if ((pos = in.find(end_line)) == std::string::npos) {
+        if ((pos = in.find(end_line)) == string::npos) {
             only_one_row = true;
         }
         // reading the first row:
@@ -253,7 +253,7 @@ namespace zich {
         width = get_width(row);
         insert_row(vector, row);
 
-        while ((pos = in.find(end_line)) != std::string::npos) {
+        while ((pos = in.find(end_line)) != string::npos) {
             row = in.substr(0, pos);
             in.erase(0, pos + end_line.length());
             check_syntax(row);
