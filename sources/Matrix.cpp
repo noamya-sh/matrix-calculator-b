@@ -80,13 +80,8 @@ namespace zich {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
-        vector<double> vector = get_sums(this->mat,other.mat,height,width);
-        double sum_this = vector[0];
-        double sum_other = vector[1];
-//        if (sum_this > sum_other) {
-//            return false;
-//        }
-        return sum_this <= sum_other;
+        vector<double> sums = get_sums(this->mat,other.mat,height,width);
+        return sums[0] <= sums[1];
     }
     bool Matrix::operator!=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
@@ -103,37 +98,22 @@ namespace zich {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
-        vector<double> vector = get_sums(this->mat,other.mat,height,width);
-        double sum_this = vector[0];
-        double sum_other = vector[1];
-//        if (sum_this < sum_other) {
-//            return false;
-//        }
-        return sum_this >= sum_other;
+        vector<double> sums = get_sums(this->mat,other.mat,height,width);
+        return sums[0] >= sums[1];
     }
     bool Matrix::operator>(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
-        vector<double> vector = get_sums(this->mat,other.mat,height,width);
-        double sum_this = vector[0];
-        double sum_other = vector[1];
-//        if (sum_this <= sum_other) {
-//            return false;
-//        }
-        return sum_this > sum_other;
+        vector<double> sums = get_sums(this->mat,other.mat,height,width);
+        return sums[0] > sums[1];
     }
     bool Matrix::operator<(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
         }
-        vector<double> vector = get_sums(this->mat,other.mat,height,width);
-        double sum_this = vector[0];
-        double sum_other = vector[1];
-//        if (sum_this >= sum_other) {
-//            return false;
-//        }
-        return sum_this < sum_other;
+        vector<double> sums = get_sums(this->mat,other.mat,height,width);
+        return sums[0] < sums[1];
     }
     Matrix &Matrix::operator*=(double scalar) {
         for (unsigned int i = 0; i < this->mat.size(); ++i) {
