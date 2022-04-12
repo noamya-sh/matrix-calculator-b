@@ -9,7 +9,7 @@ namespace zich {
         int height;
         int width;
     public:
-        Matrix(vector<double> input, int height, int width);
+        Matrix(const vector<double> &input, int height, int width);
         Matrix(const Matrix &matrix);
 //        Matrix(const vector<vector<double>> mat, int height, int width);
         ~Matrix();

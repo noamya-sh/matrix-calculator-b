@@ -4,6 +4,38 @@
 #include <vector>
 #include "Matrix.hpp"
 namespace zich {
+    void insert_row(vector<double> &vector, const string &row) {
+        unsigned int i = 1;
+        string element;
+        while (i < row.size() - 1) {
+            while (row.at(i) != ' ' && row.at(i) != ']') {
+                element += row.at(i++);
+            }
+            i++;
+            vector.push_back(stod(element));
+            element = "";
+        }
+    }
+    int get_width(const string &row) {
+        int width = 1;
+        for (unsigned int i = 1; i < row.size() - 1; ++i) {
+            while (row.at(i) == ' ') {
+                width++;
+                i++;
+            }
+        }
+        return width;
+    }
+    void check_syntax(const string &row) {
+        if (row.at(0) != '[' || row.at(row.size() - 1) != ']') {
+            throw invalid_argument("Wrong row!");
+        }
+    }
+    void check_width(int width, const string &row) {
+        if (width != get_width(row)) {
+            throw std::invalid_argument("columns must be same the size!");
+        }
+    }
     vector<double> get_sums(vector<double> mat1,vector<double> mat2,int height, int width){
         double sum_mat1 = 0;
         double sum_mat2 = 0;
@@ -21,7 +53,7 @@ namespace zich {
         this->height = matrix.height;
         this->width = matrix.width;
     }
-    Matrix::Matrix(vector<double> input, int height, int width){
+    Matrix::Matrix(const vector<double> &input, int height, int width){
         if (input.size() != height*width){
             throw invalid_argument("NO same size!!");
         }
@@ -44,17 +76,6 @@ namespace zich {
         }
         return true;
     }
-//    bool Matrix::operator==(const Matrix &other) const {
-//        if (other.height != height || other.width !=  width){
-//            throw runtime_error("not same size");
-//        }
-//        for (unsigned int i = 0; i < other.mat.size(); ++i) {
-//            if (other.mat[i] != this->mat[i]){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
     bool Matrix::operator<=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
             throw runtime_error("not same size");
@@ -62,10 +83,10 @@ namespace zich {
         vector<double> vector = get_sums(this->mat,other.mat,height,width);
         double sum_this = vector[0];
         double sum_other = vector[1];
-        if (sum_this > sum_other) {
-            return false;
-        }
-        return true;
+//        if (sum_this > sum_other) {
+//            return false;
+//        }
+        return sum_this <= sum_other;
     }
     bool Matrix::operator!=(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
@@ -85,10 +106,10 @@ namespace zich {
         vector<double> vector = get_sums(this->mat,other.mat,height,width);
         double sum_this = vector[0];
         double sum_other = vector[1];
-        if (sum_this < sum_other) {
-            return false;
-        }
-        return true;
+//        if (sum_this < sum_other) {
+//            return false;
+//        }
+        return sum_this >= sum_other;
     }
     bool Matrix::operator>(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
@@ -97,10 +118,10 @@ namespace zich {
         vector<double> vector = get_sums(this->mat,other.mat,height,width);
         double sum_this = vector[0];
         double sum_other = vector[1];
-        if (sum_this <= sum_other) {
-            return false;
-        }
-        return true;
+//        if (sum_this <= sum_other) {
+//            return false;
+//        }
+        return sum_this > sum_other;
     }
     bool Matrix::operator<(const Matrix &other) const {
         if (other.height != height || other.width !=  width){
@@ -109,10 +130,10 @@ namespace zich {
         vector<double> vector = get_sums(this->mat,other.mat,height,width);
         double sum_this = vector[0];
         double sum_other = vector[1];
-        if (sum_this >= sum_other) {
-            return false;
-        }
-        return true;
+//        if (sum_this >= sum_other) {
+//            return false;
+//        }
+        return sum_this < sum_other;
     }
     Matrix &Matrix::operator*=(double scalar) {
         for (unsigned int i = 0; i < this->mat.size(); ++i) {
@@ -232,8 +253,78 @@ namespace zich {
         }
         return output;
     }
-    istream &operator>>(istream &input, Matrix &matrix){
+    istream &operator>>(istream &input, Matrix &matrix) {
+        string in;
+        vector<double> vector;
+        getline(input, in);
+        int width = 0;
+        int height = 0;
+        string end_line = ", ";
+        size_t pos = 0;
+        string row;
+        bool only_one_row = false;
+        if ((pos = in.find(end_line)) == std::string::npos) {
+            only_one_row = true;
+        }
+        // reading the first row:
+        row = in.substr(0, pos);
+        in.erase(0, pos + end_line.length());
+        check_syntax(row);
+        width = get_width(row);
+        insert_row(vector, row);
 
+        while ((pos = in.find(end_line)) != std::string::npos) {
+            row = in.substr(0, pos);
+            in.erase(0, pos + end_line.length());
+            check_syntax(row);
+            check_width(width, row);
+            insert_row(vector, row);
+            height++;
+        }
+
+        if (!only_one_row) {
+            check_syntax(in);
+            check_width(width, in);
+            insert_row(vector, in); // adding the last row
+            height++;
+        }
+        matrix.mat = vector;
+        matrix.height = height;
+        matrix.width = width;
         return input;
     }
+//        if ((pos = in.find(delimiter)) == std::string::npos) {
+//            oneRow = true;
+//        }
+//
+//        // reading the first row:
+//        currRow = in.substr(0, pos);
+//        in.erase(0, pos + delimiter.length());
+//        Matrix::check_syntax(currRow);
+//        width = Matrix::getCols(currRow);
+//        Matrix::addRow(inputVec, currRow);
+//
+//        // looping through each of the rows - checking them and adding them to the new vector
+//        while ((pos = in.find(delimiter)) != std::string::npos) {
+//            currRow = in.substr(0, pos);
+//            in.erase(0, pos + delimiter.length());
+//            Matrix::check_syntax(currRow);
+//            Matrix::check_width(width, currRow);
+//            Matrix::insert_row(inputVec, currRow);
+//            numOfRows++;
+//        }
+//
+//        if (!oneRow) {
+//            Matrix::check_syntax(in);
+//            Matrix::check_width(width, in);
+//            Matrix::insert_row(inputVec, in); // adding the last row
+//            numOfRows++;
+//        }
+//
+//        // add changes to matrix
+//        m.mat.swap(inputVec);
+//        m.col = (int) width;
+//        m.row = (int) numOfRows;
+//        return input;
+
 }
