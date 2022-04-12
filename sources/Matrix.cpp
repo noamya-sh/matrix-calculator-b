@@ -273,38 +273,4 @@ namespace zich {
         matrix.width = width;
         return input;
     }
-//        if ((pos = in.find(delimiter)) == std::string::npos) {
-//            oneRow = true;
-//        }
-//
-//        // reading the first row:
-//        currRow = in.substr(0, pos);
-//        in.erase(0, pos + delimiter.length());
-//        Matrix::check_syntax(currRow);
-//        width = Matrix::getCols(currRow);
-//        Matrix::addRow(inputVec, currRow);
-//
-//        // looping through each of the rows - checking them and adding them to the new vector
-//        while ((pos = in.find(delimiter)) != std::string::npos) {
-//            currRow = in.substr(0, pos);
-//            in.erase(0, pos + delimiter.length());
-//            Matrix::check_syntax(currRow);
-//            Matrix::check_width(width, currRow);
-//            Matrix::insert_row(inputVec, currRow);
-//            numOfRows++;
-//        }
-//
-//        if (!oneRow) {
-//            Matrix::check_syntax(in);
-//            Matrix::check_width(width, in);
-//            Matrix::insert_row(inputVec, in); // adding the last row
-//            numOfRows++;
-//        }
-//
-//        // add changes to matrix
-//        m.mat.swap(inputVec);
-//        m.col = (int) width;
-//        m.row = (int) numOfRows;
-//        return input;
-
 }
