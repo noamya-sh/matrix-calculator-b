@@ -23,7 +23,7 @@ namespace zich {
     }
     Matrix::Matrix(const vector<double> &input, int height, int width){
         if (input.size() != height*width){
-            throw invalid_argument("NO same size!!");
+            throw invalid_argument("not same size!");
         }
         if (width < 0 || height <0){
             throw invalid_argument("Height and width are positive!!");
