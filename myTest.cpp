@@ -15,6 +15,7 @@ TEST_CASE("temp"){
     vector<double> vec2 = {5, 9, 0, 5, 1, 2, -1, 0,10, 1};
     vector<double> vec3 = {1, 2, 1, 1, 1, 4, 21, 0,11, 4};
     vector<double> vec4 = {5};
+    vector<double> vec5 = {1,2,3};
     Matrix m1 = Matrix(vec,3,3);
 //    Matrix m2 = Matrix(vec2,3,3);
     CHECK_NOTHROW(Matrix(vec2,5,2));
@@ -32,6 +33,13 @@ TEST_CASE("temp"){
 //    CHECK_THROWS(m1>=m2);
     CHECK_THROWS(m1*m2);
     CHECK_THROWS(m3*m2);
+    Matrix m5 = Matrix(vec5,1,3);
+    Matrix m6 = Matrix({3,4,5},1,3);
+    m6--;
+    --m6;
+    CHECK_EQ(m6 == m5, true);
+    CHECK_NOTHROW(m4*m5);
+    CHECK_THROWS(m5*m4);
     CHECK_NOTHROW(m1*0.5);
     CHECK_NOTHROW(4.1*m1);
     CHECK_NOTHROW(-m1);

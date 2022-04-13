@@ -234,20 +234,15 @@ namespace zich {
         return output;
     }
     istream &operator>>(istream &input, Matrix &matrix) {
-        vector<double> vector;
         string in;
         getline(input, in);
-        int width = 0;
-        int height = 0;
         string end_line = ", ";
         size_t pos = 0;
-        string row;
-        bool only_one_row = false;
-        if ((pos = in.find(end_line)) == string::npos) {
-            only_one_row = true;
-        }
-        // reading the first row:
-        row = in.substr(0, pos);
+        bool only_one_row = ((pos = in.find(end_line)) == string::npos);
+        vector<double> vector;
+        int width = 0;
+        int height = 0;
+        string row = in.substr(0, pos);
         in.erase(0, pos + end_line.length());
         check_syntax(row);
         width = get_width(row);
@@ -265,7 +260,7 @@ namespace zich {
         if (!only_one_row) {
             check_syntax(in);
             check_width(width, in);
-            insert_row(vector, in); // adding the last row
+            insert_row(vector, in);
             height++;
         }
         matrix.mat = vector;
